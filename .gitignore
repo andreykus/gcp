@@ -1,0 +1,16 @@
+
+.idea
+.idea/
+
+/out/
+/logs/
+/target/
+
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.log
+*.iml
+.attach_*
