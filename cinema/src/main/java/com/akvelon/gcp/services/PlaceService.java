@@ -11,7 +11,6 @@ import com.akvelon.gcp.repository.mappers.MovieMapper;
 import com.akvelon.gcp.repository.mappers.PlaceMapper;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.util.StreamUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +19,10 @@ import javax.validation.ValidationException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
+
 
 /**
+ * @author Andrey Kustov on 12.12.2021
  * service for manager  place on cinema  hall
  */
 @Service

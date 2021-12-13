@@ -2,7 +2,7 @@ package com.akvelon.gcp.controllers;
 
 import com.akvelon.gcp.bean.TicketStatus;
 import com.akvelon.gcp.bean.dto.Ticket;
-import com.akvelon.gcp.services.TicketServica;
+import com.akvelon.gcp.services.TicketService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.List;
 public class TicketController {
 
     @Autowired
-    TicketServica ticketServica;
+    TicketService ticketService;
 
     /**
      * dictionary ticket status
@@ -33,7 +33,7 @@ public class TicketController {
     )
     @GetMapping("/status")
     public ResponseEntity<List<TicketStatus>> ticketStatus() {
-        return ResponseEntity.ok(ticketServica.getTicketStatus());
+        return ResponseEntity.ok(ticketService.getTicketStatus());
     }
 
 
@@ -48,7 +48,7 @@ public class TicketController {
     )
     @GetMapping("/{ticketId}")
     public ResponseEntity<Ticket> ticket(@ApiParam(value = " ticket id", required = true) @PathVariable Integer ticketId) {
-        return ResponseEntity.ok(ticketServica.getTicket(ticketId));
+        return ResponseEntity.ok(ticketService.getTicket(ticketId));
     }
 
     /**
@@ -62,7 +62,7 @@ public class TicketController {
     )
     @GetMapping("/buyOnMovie")
     public ResponseEntity<Integer> buyTicket(@ApiParam(value = "movie id", required = true) @RequestParam Integer movieId) {
-        return ResponseEntity.ok(ticketServica.buyTicketOnMovie(movieId));
+        return ResponseEntity.ok(ticketService.buyTicketOnMovie(movieId));
     }
 
     /**
@@ -79,7 +79,7 @@ public class TicketController {
             @ApiParam(value = "movie id", required = true) @RequestParam Integer movieId,
             @ApiParam(value = "number", required = true) @RequestParam Integer number
             ) {
-        return ResponseEntity.ok(ticketServica.buyTicket(movieId, number));
+        return ResponseEntity.ok(ticketService.buyTicket(movieId, number));
     }
 
     /**
@@ -95,7 +95,7 @@ public class TicketController {
     public ResponseEntity<Integer> buyTicketOnPlace(
             @ApiParam(value = "place id", required = true) @RequestParam Integer placeId
     ) {
-        return ResponseEntity.ok(ticketServica.buyTicket(placeId));
+        return ResponseEntity.ok(ticketService.buyTicket(placeId));
     }
 
 }

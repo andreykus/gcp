@@ -18,4 +18,4 @@ Use Maven (Front dependency nmp plugin,  kotlin plugin)
 © Akvelon 2021
 
 
-    #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
+    #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

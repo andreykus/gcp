@@ -4,24 +4,28 @@
 <mapper namespace="com.akvelon.gcp.repository.mappers.TicketMapper">
 
     <resultMap id="ticketResultMap" type="com.akvelon.gcp.bean.dto.Ticket">
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="place_id" property="placeId" jdbcType="INTEGER" />
-        <result column="status" property="status" javaType="com.akvelon.gcp.bean.TicketStatus" jdbcType="VARCHAR" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
-        <result column="hallname"   property="hallName" jdbcType="VARCHAR"/>
-        <result column="name"  property="movieName" jdbcType="VARCHAR"/>
-        <result column="num" property="number" jdbcType="INTEGER" />
-        <result column="date"  property="date" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="place_id" property="placeId" jdbcType="INTEGER"/>
+        <result column="status" property="status" javaType="com.akvelon.gcp.bean.TicketStatus" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result column="hallname" property="hallName" jdbcType="VARCHAR"/>
+        <result column="name" property="movieName" jdbcType="VARCHAR"/>
+        <result column="num" property="number" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="date" property="date" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
     </resultMap>
 
     <insert id="addTicket" parameterType="com.akvelon.gcp.bean.dto.Ticket">
         <selectKey keyProperty="ticket.id" keyColumn="id" resultType="int" order="BEFORE">
             SELECT CAST(nextval('ticket_seq') as INTEGER)
         </selectKey>
-        insert into ticket (id,status,place_id)
+        insert into ticket (id,status,place_id,user_id)
         values (
             #{ticket.id},
             #{ticket.status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
-            #{ticket.placeId}
+            #{ticket.placeId},
+            #{ticket.userId}
         )
     </insert>
 

@@ -174,7 +174,6 @@
         </sql>
     </changeSet>
 
-
     <changeSet author="kustov" id="add col duration  on movie" runInTransaction="false" context="create" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -183,6 +182,61 @@
         </preConditions>
         <addColumn tableName="movie">
             <column name="duration"   type="int" defaultValue="0"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="kustov" id="create table users"  runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column name="id"                   type="int">
+                <constraints primaryKeyName="users_pkey" primaryKey="true"/>
+            </column>
+            <column name="google" type="varchar(2000)"> </column>
+            <column name="key" type="varchar(2000)"> </column>
+            <column name="role" type="varchar(30)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kustov" id="create users_seq" runInTransaction="false" context="create"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="users_seq"/>
+            </not>
+        </preConditions>
+        <createSequence
+                incrementBy="1"
+                minValue="100"
+                sequenceName="users_seq"
+                startValue="1000"/>
+    </changeSet>
+
+    <changeSet author="kustov" id="insert users" context="create" dbms="postgresql" >
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="google" value="andreykus@mail.ru"/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="akustov" id="index users_google_INDEX" runInTransaction="false" context="create" dbms="postgresql">
+        <sql splitStatements="false">
+            CREATE INDEX IF NOT EXISTS users_google_INDEX ON users(google)
+        </sql>
+    </changeSet>
+
+    <changeSet author="kustov" id="add col user_id  on ticket" runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="ticket" columnName="user_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="ticket">
+            <column name="user_id"   type="int"/>
         </addColumn>
     </changeSet>
 

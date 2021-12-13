@@ -37,6 +37,9 @@ public class Ticket extends Entity implements Serializable {
     @ApiModelProperty(value = "data event")
     private LocalDateTime date;
 
+    @ApiModelProperty(value = "user id")
+    private Integer userId;
+
     public Integer getNumber() {
         return number;
     }
@@ -83,5 +86,13 @@ public class Ticket extends Entity implements Serializable {
 
     public void setHallName(String hallName) {
         this.hallName = hallName;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

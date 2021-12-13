@@ -21,6 +21,16 @@ spring:
     driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:migration/initialRootChangeLog.xml
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 750903720791-e31ldu0i3uraae2c0q6mi5ctakcmekq4.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

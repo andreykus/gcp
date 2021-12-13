@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+/**
+ /**
+ * @author Andrey Kustov on 12.12.2021
+ * service info
+ */
 @Service
 public class InfoService {
 

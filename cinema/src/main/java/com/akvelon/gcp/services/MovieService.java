@@ -18,9 +18,14 @@ import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
+/**
+ * @author Andrey Kustov on 12.12.2021
+ * service for manager movies show
+ */
 @Service
 @Transactional
-public class MovieService {
+public class MovieService extends AbstractServices{
 
     @Resource
     CinemaHallMapper cinemaHallMapper;
