@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.akvelon.gcp.repository.mappers.CinemaHallMapper">
+
+    <resultMap id="hallResultMap" type="com.akvelon.gcp.bean.dto.CinemaHall">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name"   property="name" jdbcType="VARCHAR"/>
+        <result column="capacity"   property="capacity" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="all" resultMap="hallResultMap">
+        select
+            h.*
+        from cinemahall h
+        order by h.name
+    </select>
+
+    <select id="checkHallById" resultMap="hallResultMap">
+        select
+            h.*
+        from cinemahall h
+        where h.id = #{id} limit 1
+    </select>
+
+</mapper>

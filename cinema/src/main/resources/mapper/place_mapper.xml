@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.akvelon.gcp.repository.mappers.PlaceMapper">
+
+    <resultMap id="placeResultMap" type="com.akvelon.gcp.bean.dto.Place">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="num"   property="number" jdbcType="INTEGER"/>
+        <result column="movie_id" property="movieId" jdbcType="INTEGER" />
+        <result column="status" property="status" javaType="com.akvelon.gcp.bean.PlaceStatus" jdbcType="VARCHAR" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+    </resultMap>
+
+    <delete id="deletePlaceById">
+        delete from place where id = #{id}
+    </delete>
+
+    <update id="updatePlaceStatus">
+          update place
+             set status = #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+          where id = #{id}
+    </update>
+
+    <select id="countPlacesByParam" resultType="long">
+        select count(1)
+        from place p
+        <include refid="queryAndCountWhereStatement"/>
+    </select>
+
+    <select id="searchPlacesByParam" resultMap="placeResultMap">
+        select p.*
+        from place p
+        <include refid="queryAndCountWhereStatement"/>
+        order by p.num
+        <if test="pageable.paged">
+            limit #{pageable.pageSize} offset #{pageable.offset}
+        </if>
+    </select>
+
+    <sql id="queryAndCountWhereStatement">
+        <where>
+            <if test="filter != null">
+                <if test="filter.status != null">
+                    and p.status = #{filter.status, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+                </if>
+                <if test="filter.movieId != null">
+                    and p.movie_id = #{filter.movieId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="placeById" resultMap="placeResultMap">
+        select p.*
+        from place p
+        where p.id = #{id}  limit 1
+    </select>
+
+    <select id="placeByNumber" resultMap="placeResultMap">
+        select p.*
+        from place p
+        where p.movie_id = #{id} and p.num = #{number} limit 1
+    </select>
+
+    <insert id="addPlace" parameterType="com.akvelon.gcp.bean.dto.Place">
+        <selectKey keyProperty="place.id" keyColumn="id" resultType="Integer" order="BEFORE">
+            SELECT CAST(nextval('place_seq') as INTEGER)
+        </selectKey>
+        insert into place  (id, num, status, movie_id)
+        values (
+            #{place.id},
+            #{place.number},
+            #{place.status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{place.movieId}
+        )
+    </insert>
+
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+
+    <changeSet author="kustov" id="create table cinema hall"  runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cinemahall"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cinemahall">
+            <column name="id"                   type="int">
+                <constraints primaryKeyName="cinemahall_pkey" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(2000)"> </column>
+            <column name="capacity" type="int"> </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kustov" id="create table movie"  runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="movie"/>
+            </not>
+        </preConditions>
+        <createTable tableName="movie">
+            <column name="id"                   type="int">
+                <constraints primaryKeyName="movie_pkey" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(2000)"> </column>
+            <column name="date" type="timestamp"> </column>
+            <column name="cinemahall_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="fk_movie_cinemahall_cinemahall_id" baseTableName="movie" baseColumnNames="cinemahall_id"
+                                 referencedTableName="cinemahall" referencedColumnNames="id" onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet author="kustov" id="insert cinemahall" context="create" dbms="postgresql" >
+        <insert tableName="cinemahall">
+            <column name="id" value="1"/>
+            <column name="name" value="red"/>
+            <column name="capacity" value="100"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="kustov" id="create cinemahall_seq" runInTransaction="false" context="create"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="cinemahall_seq"/>
+            </not>
+        </preConditions>
+        <createSequence
+                incrementBy="1"
+                minValue="100"
+                sequenceName="cinemahall_seq"
+                startValue="1000"/>
+    </changeSet>
+
+    <changeSet author="kustov" id="create movie_seq" runInTransaction="false" context="create"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="movie_seq"/>
+            </not>
+        </preConditions>
+        <createSequence
+                incrementBy="1"
+                minValue="100"
+                sequenceName="movie_seq"
+                startValue="1000"/>
+    </changeSet>
+
+    <changeSet author="kustov" id="create place"  runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="place"/>
+            </not>
+        </preConditions>
+        <createTable tableName="place">
+            <column name="id"                   type="int">
+                <constraints primaryKeyName="place_pkey" primaryKey="true"/>
+            </column>
+            <column name="status" type="varchar(20)" defaultValue="FREE"/>
+            <column name="num" type="int"/>
+            <column name="movie_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="fk_place_movie_id" baseTableName="place" baseColumnNames="movie_id"
+                                 referencedTableName="movie" referencedColumnNames="id" onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet author="kustov" id="create place_seq" runInTransaction="false" context="create"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="place_seq"/>
+            </not>
+        </preConditions>
+        <createSequence
+                incrementBy="1"
+                minValue="100"
+                sequenceName="place_seq"
+                startValue="1000"/>
+    </changeSet>
+
+    <changeSet author="kustov" id="create ticket"  runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ticket"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ticket">
+            <column name="id"                   type="int">
+                <constraints primaryKeyName="ticket_pkey" primaryKey="true"/>
+            </column>
+            <column name="status" type="varchar(30)" defaultValue="NOT_PAID"/>
+            <column name="place_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="fk_ticket_place_id" baseTableName="ticket" baseColumnNames="place_id"
+                                 referencedTableName="place" referencedColumnNames="id" onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet author="kustov" id="create ticket_seq" runInTransaction="false" context="create"
+               dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="ticket_seq"/>
+            </not>
+        </preConditions>
+        <createSequence
+                incrementBy="1"
+                minValue="100"
+                sequenceName="ticket_seq"
+                startValue="1000"/>
+    </changeSet>
+
+
+    <changeSet author="kustov" id="index movie_fulltext_ru" runInTransaction="false" context="create" dbms="postgresql">
+        <sql splitStatements="false">
+            CREATE INDEX IF NOT EXISTS movie_full_text_name_ru_idx ON movie
+            USING gin(to_tsvector ( 'russian', regexp_replace ( LOWER(movie.name), 'Ё|ё' , 'е' , 'g' ) ));
+        </sql>
+    </changeSet>
+
+    <changeSet author="kustov" id="add col status  on movie" runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="movie" columnName="status"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="movie">
+            <column name="status"   type="varchar(20)" defaultValue="PLAN"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="akustov" id="index movie_status_INDEX" runInTransaction="false" context="create" dbms="postgresql">
+        <sql splitStatements="false">
+            CREATE INDEX IF NOT EXISTS movie_status_INDEX ON movie(status)
+        </sql>
+    </changeSet>
+
+    <changeSet author="akustov" id="index movie_date_INDEX" runInTransaction="false" context="create" dbms="postgresql">
+        <sql splitStatements="false">
+            CREATE INDEX IF NOT EXISTS movie_date_INDEX ON movie(date)
+        </sql>
+    </changeSet>
+
+
+    <changeSet author="kustov" id="add col duration  on movie" runInTransaction="false" context="create" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="movie" columnName="duration"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="movie">
+            <column name="duration"   type="int" defaultValue="0"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

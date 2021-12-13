@@ -6,6 +6,8 @@
 /logs/
 /target/
 
+git add
+
 *.class
 *.jar
 *.war

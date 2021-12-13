@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.akvelon.gcp.repository.mappers.MovieMapper">
+
+    <resultMap id="movieResultMap" type="com.akvelon.gcp.bean.dto.Movie">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name"   property="name" jdbcType="VARCHAR"/>
+        <result column="duration" property="duration" jdbcType="INTEGER" />
+        <result column="cinemahall_id" property="cinemaHallId" jdbcType="INTEGER" />
+        <result column="date"   property="date" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="status" property="status" javaType="com.akvelon.gcp.bean.MovieStatus" jdbcType="VARCHAR" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+    </resultMap>
+
+    <delete id="deleteMovieById">
+        delete from movie where id = #{id}
+    </delete>
+
+    <insert id="addMovie" parameterType="com.akvelon.gcp.bean.dto.Movie">
+        <selectKey keyProperty="movie.id" keyColumn="id" resultType="Integer" order="BEFORE">
+            SELECT CAST(nextval('movie_seq') as INTEGER)
+        </selectKey>
+         insert into movie (id, name, status, date, cinemahall_id, duration)
+          values (
+               #{movie.id},
+               #{movie.name},
+               #{movie.status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+               #{movie.date, typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+               #{movie.cinemaHallId},
+               #{movie.duration}
+          )
+    </insert>
+
+    <update id="updateMovie" parameterType="com.akvelon.gcp.bean.dto.Movie">
+          update movie
+             set status = #{movie.status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+             cinemahall_id = #{movie.cinemaHallId},
+             date = #{movie.date, typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+             duration = #{movie.duration},
+             name = #{movie.name}
+          where id = #{movie.id}
+    </update>
+
+    <select id="countMoviesByParam" resultType="long">
+        select count(1)
+        from movie m
+        <include refid="queryAndCountWhereStatement"/>
+    </select>
+
+    <select id="searchMoviesByParam" resultMap="movieResultMap">
+        select m.*
+        from movie m
+        <include refid="queryAndCountWhereStatement"/>
+        order by m.date, m.status, m.name
+        <if test="pageable.paged">
+            limit #{pageable.pageSize} offset #{pageable.offset}
+        </if>
+    </select>
+
+    <sql id="queryAndCountWhereStatement">
+        <where>
+            <if test="filter != null">
+                <if test="filter.searchString != null">
+                    and (to_tsvector('russian', regexp_replace(m.name, 'Ё|ё', 'е', 'g'))
+                    @@ to_tsquery ('russian', NULLIF(#{filter.searchString},'') ))
+                </if>
+                <if test="filter.status != null">
+                    and m.status = #{filter.status, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+                </if>
+                <if test="filter.start != null">
+                    and m.date >= #{filter.start, typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </if>
+                <if test="filter.end != null">
+                    and m.date &lt;= #{filter.end, typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="movietById" resultMap="movieResultMap">
+        select m.*
+        from movie m
+        where m.id = #{id} limit 1
+    </select>
+
+</mapper>
