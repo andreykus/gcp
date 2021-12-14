@@ -8,9 +8,9 @@ Akvelon Cinema Manages
 Build
 ==========================   
     
-Use Maven (Front dependency nmp plugin,  kotlin plugin)    
-  maven clean install
-  maven clean  deploy
+Use Maven    
+  mvn clean install
+  mvn clean  deploy
      
 
 
@@ -18,4 +18,4 @@ Use Maven (Front dependency nmp plugin,  kotlin plugin)
 © Akvelon 2021
 
 
-    #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
+    #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
