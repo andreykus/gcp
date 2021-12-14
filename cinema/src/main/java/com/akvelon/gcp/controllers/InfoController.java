@@ -9,15 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author Andrey Kustov on 12.12.2021
  * controller  information
  */
 @Api(value = "Controller info", description = "Info service")
-@RestController
+@RestControllerAdvice
 @RequestMapping("/api/info")
-public class InfoController {
+public class InfoController extends AbstractRestController{
 
 
     @Autowired

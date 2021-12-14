@@ -20,7 +20,7 @@ import java.util.List;
 @Api(value = "Controller Places", description = "manage place in  hall")
 @RestControllerAdvice
 @RequestMapping("/api/places")
-public class PlaceController {
+public class PlaceController extends AbstractRestController{
 
     @Autowired
     PlaceService placeService;

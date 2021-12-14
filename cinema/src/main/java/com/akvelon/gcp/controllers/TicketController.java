@@ -17,7 +17,7 @@ import java.util.List;
 @Api(value = "Controller Tickets", description = "manage Tickets for movie show")
 @RestControllerAdvice
 @RequestMapping("/api/tickets")
-public class TicketController {
+public class TicketController extends AbstractRestController{
 
     @Autowired
     TicketService ticketService;

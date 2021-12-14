@@ -18,7 +18,7 @@ import java.util.List;
 @Api(value = "Controller Movie show", description = "manage Movie show")
 @RestControllerAdvice
 @RequestMapping("/api/movies")
-public class MovieController {
+public class MovieController extends AbstractRestController{
 
     @Autowired
     MovieService movieService;
