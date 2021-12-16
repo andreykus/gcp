@@ -19,7 +19,7 @@ services:
     networks:
       - cinema-network
   cinema:
-    image: eu.gcr.io/steam-current-329713/cinema:1.0-SNAPSHOT
+    image: eu.gcr.io/eminent-crane-329517/cinema:1.0-SNAPSHOT
     container_name: cinema-service
     hostname: cinema
     environment:

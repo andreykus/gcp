@@ -8,7 +8,8 @@ Akvelon Cinema Manages
 Build
 ==========================   
     
-Use Maven    
+Use Maven   
+ 
   mvn clean install
   mvn clean  deploy
      

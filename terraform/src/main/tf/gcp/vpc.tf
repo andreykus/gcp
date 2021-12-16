@@ -13,7 +13,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 }
 
 resource "google_vpc_access_connector" "connector" {
-  name = "${var.run_name}-connector"
+  name = "${var.run_name}-conn"
   ip_cidr_range = var.vpc_connector_cidr
   network = var.vpc_name
 }

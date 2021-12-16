@@ -301,7 +301,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>eu.gcr.io/steam-current-329713/cinema</repository>
+                    <repository>eu.gcr.io/eminent-crane-329517/cinema</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>

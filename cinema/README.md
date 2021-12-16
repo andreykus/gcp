@@ -8,8 +8,11 @@ Service Cinema
 
 GOOGLE OAUTH 2
 ==========================
-https://console.cloud.google.com/apis/credentials?project=steam-current-329713
-OAuth consent screen -> External
-redirect  to http://localhost:8080/login/oauth2/code/google
+
+    https://console.cloud.google.com/apis/credentials?project=steam-current-329713
+    OAuth consent screen -> External
+    redirect  to http://localhost:8080/login/oauth2/code/google
+
+
 © Akvelon 2021
 
