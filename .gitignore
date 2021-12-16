@@ -5,7 +5,8 @@
 /out/
 /logs/
 /target/
-/src/main/tf/gcp/.terraform
+/terraform/src/main/tf/gcp/.terraform
+
 git add
 
 *.class
