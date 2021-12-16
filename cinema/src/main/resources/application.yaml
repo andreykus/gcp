@@ -27,7 +27,7 @@ spring:
         registration:
           google:
             clientId: 352372447652-mbt46ftlgrridlrft4sgvkble4he8ndr.apps.googleusercontent.com
-            clientSecret: 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
+            clientSecret: ""
             redirectUri: https://cinema-rest-bp7jpfrtvq-ew.a.run.app/login/oauth2/code/google
             scope:
               - email
